@@ -1,0 +1,25 @@
+{
+  "name": "FPW Subscriber",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Single-click subscribe for Fire Pro Wrestling",
+  "homepage_url": "https://fblx.me",
+  "icons": { "16": "images/icon16.png",
+           "48": "images/icon48.png",
+          "128": "images/icon128.png" },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "page_action": {
+    "default_title": "FPW Subscriber",
+    "default_icon": "images/icon128.png"
+  },
+  "permissions": [
+    "https://firepro-w.com/item/detail/*",
+    "declarativeContent",
+    "tabs"
+  ]
+}
