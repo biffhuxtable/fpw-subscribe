@@ -1,5 +1,4 @@
 (function() {
-
 	var getSiblings = function (elem) {
 
 		var siblings = 0;
@@ -27,7 +26,7 @@
 	var mainButton = document.getElementById('item--subscribe');
 
 	if (mainButton.textContent != 'Subscribed') {
-		sendRequest(mainItemId);		
+		sendRequest(mainItemId);
 	}
 
 	for (i = 0; i < collection.length; i++) {
@@ -37,7 +36,6 @@
 			sendRequest(itemId);
 		}
 	}
-	
-	location.reload();
 
+	location.reload();
 })();
