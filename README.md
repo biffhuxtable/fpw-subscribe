@@ -1,5 +1,5 @@
 # fpw-subscribe
-Single-click subscribe for Fire Pro Wrestling
+Single-click subscribe for Fire Pro Wrestling World
 
 ## Instructions
 
