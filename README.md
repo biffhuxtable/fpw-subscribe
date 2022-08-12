@@ -1,4 +1,4 @@
-# fpw-subscribe
+# fpw-subscribe (PS4 version)
 Single-click subscribe for Fire Pro Wrestling World
 
 ## Instructions
