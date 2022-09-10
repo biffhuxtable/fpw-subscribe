@@ -1,6 +1,7 @@
-(function() {
+function toggleSub(subscribe) {
 
 	if (window.location.hostname == 'firepro-w.com') {
+
 		var getSiblings = function (elem) {
 
 			var siblings = 0;
@@ -10,7 +11,7 @@
 				if (sibling.nodeType === 1 && sibling !== elem) {
 					siblings++;
 				}
-				sibling = sibling.nextSibling
+				sibling = sibling.nextSibling;
 			}
 
 			return siblings;
@@ -27,31 +28,70 @@
 		var mainItemId = window.location.pathname.split("/")[3];
 		var mainButton = document.getElementById('item--subscribe');
 
-		if (mainButton.textContent != 'Subscribed') {
-			sendRequest(mainItemId);
+		if (subscribe) {
+
+			if (mainButton.textContent.trim() != 'Subscribed') {
+				sendRequest(mainItemId);
+			}
+
+			for (i = 0; i < collection.length; i++) {
+
+				if ( getSiblings(collection[i]) == 0 ) {
+					var itemId = collection[i].getAttribute('href').split("detail/")[1];
+					sendRequest(itemId);
+				}
+			}
+			
+			setTimeout(function(){
+				window.location.reload(1);
+			}, 1000);
 		}
+		else {
 
-		for (i = 0; i < collection.length; i++) {
-			if ( getSiblings(collection[i]) == 0 ) {
-				var itemId = collection[i].getAttribute('href').split("detail/")[1];
+			if ( window.confirm('Are you sure you want to unsubscribe from all parts? This could include parts for other wrestlers!') ) {
 
-				sendRequest(itemId);
+				if (mainButton.textContent.trim() == 'Subscribed') {
+					sendRequest(mainItemId);
+				}
+
+				for (i = 0; i < collection.length; i++) {
+
+					if ( getSiblings(collection[i]) != 0 ) {
+						var itemId = collection[i].getAttribute('href').split("detail/")[1];
+						sendRequest(itemId);
+					}
+				}
+
+				setTimeout(function(){
+					window.location.reload(1);
+				}, 1000);
+
+			}
+			else {
+
 			}
 		}
-
-		location.reload();
 
 	} else {
 		
 		var itemId = document.getElementsByName('id')[0].value;
 		var appId = document.getElementsByName('appid')[0].value;
 		var sessionId = document.getElementsByName('sessionid')[0].value;
-		var requiredItems = document.getElementsByName('requiredItems');
+
+		var requiredItemsContainer = document.getElementById('RequiredItems')
+		var requiredItems = requiredItemsContainer.children;
 
 		var sendRequest = function (id) {
 
 			var xhr = new XMLHttpRequest();
-			var url = 'https://steamcommunity.com/sharedfiles/subscribe/';
+
+			if (subscribe) {
+				var url = 'https://steamcommunity.com/sharedfiles/subscribe/';
+			}
+			else {
+				var url = 'https://steamcommunity.com/sharedfiles/unsubscribe/';
+			}
+
 			var params = 'id=' + id + '&appid=' + appId + '&sessionid=' + sessionId;
 			xhr.responseType = 'json';
 			xhr.open('POST', url, true);
@@ -66,7 +106,7 @@
 					{
 						case 1:
 						{
-							console.log('successfully subscribed to item: ' + id);
+							// console.log('successfully changed subscription for item: ' + id);
 						}
 						break;
 
@@ -94,16 +134,18 @@
 			xhr.send(params);
 		};
 
-		for (i = 0; i < requiredItems.length; i++) {
-			sendRequest(requiredItems[i].value);
-		}
+		if(subscribe || window.confirm('Are you sure you want to unsubscribe from all parts? This could include parts for other wrestlers!')){
+			for (i = 0; i < requiredItems.length; i++) {
+				reqItemId = requiredItems[i].href.match(/(?:\?id=)(.*$)/)[1];
+				sendRequest(reqItemId);
+			}
 
-		sendRequest(itemId);
+			sendRequest(itemId);
+		}
 
 		setTimeout(function(){
 			window.location.reload(1);
-		}, 2000);
+		}, 1000);
 	}
 
-
-})();
+}
